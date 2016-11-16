@@ -2,6 +2,8 @@
 using System.Text;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Collections.Generic;
+using System.Web.Script.Serialization;
 namespace ConsoleApplication1
 {
     public class Program
@@ -9,6 +11,17 @@ namespace ConsoleApplication1
         public static void Main(string[] args)
         {
             //SocketHelper.GetInstance();
+
+            Console.WriteLine("abc");
+
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("name", "abcb");
+            dict.Add("age", 20);
+
+            string json = new JsonDictConverter().DictionaryToJson(dict);
+
+            Console.WriteLine(json);
+
          
             Console.ReadKey();
             /*
@@ -29,7 +42,7 @@ namespace ConsoleApplication1
            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Person));
            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(str)))
            {
-               Person jsonObject = (Person)ser.ReadObject(ms);
+               Person jsonObject = (Person)ser.ReadObject(Class1.csms);
                Console.WriteLine(jsonObject);
 
 
@@ -44,5 +57,7 @@ namespace ConsoleApplication1
                Console.ReadKey();
            }  */
         }
+
+
     }
 }
