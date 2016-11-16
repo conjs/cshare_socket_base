@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
-using System.Runtime.Serialization.Json;
+
 using System.IO;
 using System.Collections.Generic;
-using System.Web.Script.Serialization;
+
 namespace ConsoleApplication1
 {
     public class Program
@@ -21,6 +21,10 @@ namespace ConsoleApplication1
             string json = new JsonDictConverter().DictionaryToJson(dict);
 
             Console.WriteLine(json);
+
+
+            dict = new JsonDictConverter().JsonToDictionary(json);
+            Console.WriteLine(dict);
 
          
             Console.ReadKey();

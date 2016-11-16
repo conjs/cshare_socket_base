@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Runtime.Serialization.Json;
 using System.IO;
 
 /*
@@ -104,7 +102,9 @@ namespace ConsoleApplication1
                     byte[] strBytes = Receive(socket, head);
 
                     int proto = TypeConvert.getInt(SubByte(strBytes, 0, 4),false);
-                    byte[] subData  = strBytes.Skip(4).ToArray();
+
+                    byte[] subData = new byte[strBytes.Length-4];// strBytes.Skip(4).ToArray(); C#3.0不支持此写法
+                    Buffer.BlockCopy(strBytes, 4, subData, 0, subData.Length);
 
                     idata.onData(new GMessage(proto, subData));
                 }
