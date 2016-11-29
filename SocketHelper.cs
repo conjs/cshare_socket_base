@@ -41,7 +41,7 @@ namespace ConsoleApplication1
         private IDisconnect disconnect;
         private IData idata;
 
-        private SocketHelper(IConnect connect,IDisconnect disconnect,IData data,SocketParam param)
+        public SocketHelper(IConnect connect,IDisconnect disconnect,IData data,SocketParam param)
         {
             this.connect = connect;
             this.disconnect = disconnect;
@@ -86,7 +86,7 @@ namespace ConsoleApplication1
         private void ReceiveSorket()
         {
             //在这个线程中接受服务器返回的数据  
-            byte[] recData = new byte[1024*16];
+            //byte[] recData = new byte[1024*16];
             while (true)
             {
                 if (!socket.Connected)
@@ -97,16 +97,20 @@ namespace ConsoleApplication1
                 }
                 try
                 {
-                    byte[] lengthBytes = Receive(socket, 4);
-                    int head = TypeConvert.getInt(lengthBytes, false);  // 先收内容长度
-                    byte[] strBytes = Receive(socket, head);
+                    if (socket.Available > 4)
+                    {
+                        byte[] lengthBytes = Receive(socket, 4);
+                        int head = TypeConvert.getInt(lengthBytes, false);  // 先收内容长度
+                        byte[] strBytes = Receive(socket, head);
 
-                    int proto = TypeConvert.getInt(SubByte(strBytes, 0, 4),false);
+                        int proto = TypeConvert.getInt(SubByte(strBytes, 0, 4), false);
 
-                    byte[] subData = new byte[strBytes.Length-4];// strBytes.Skip(4).ToArray(); C#3.0不支持此写法
-                    Buffer.BlockCopy(strBytes, 4, subData, 0, subData.Length);
+                        byte[] subData = new byte[strBytes.Length - 4];// strBytes.Skip(4).ToArray(); C#3.0不支持此写法
+                        Buffer.BlockCopy(strBytes, 4, subData, 0, subData.Length);
 
-                    idata.onData(new GMessage(proto, subData));
+                        idata.onData(new GMessage(proto, subData));    
+                    }
+                    
                 }
                 catch (Exception e)
                 {
@@ -118,6 +122,7 @@ namespace ConsoleApplication1
 
         private byte[] Receive(Socket socket, int length)
         {
+            
             byte[] bytes = new byte[length];
             socket.Receive(bytes);
             return bytes;

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ConsoleApplication1
 {
-    interface IData
+    public interface IData
     {
         void onData(GMessage msg);
     }

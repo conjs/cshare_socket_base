@@ -3,6 +3,7 @@ using System.Text;
 
 using System.IO;
 using System.Collections.Generic;
+using ConsoleApplication1.Test;
 
 namespace ConsoleApplication1
 {
@@ -10,21 +11,29 @@ namespace ConsoleApplication1
     {
         public static void Main(string[] args)
         {
-            //SocketHelper.GetInstance();
+            
+            //Console.WriteLine("abc");
+            //Dictionary<string, object> dict = new Dictionary<string, object>();
+            //dict.Add("name", "abcb");
+            //dict.Add("age", 20);
+            //string json = new JsonDictConverter().DictionaryToJson(dict);
+            //Console.WriteLine(json);
 
-            Console.WriteLine("abc");
+            //dict = new JsonDictConverter().JsonToDictionary(json);
+            //Console.WriteLine(dict);
+            
+            SocketParam param = new SocketParam();
+            param.ip = "10.100.70.17";
+            param.port = 20000;
+            param.timeout = 10000;
+            SocketHelper helper = new SocketHelper(new Connector(),new Disconnector(),new RecData(),param);
+            byte[] data = Encoding.UTF8.GetBytes("{\"openid\":\"czw12\"}");
+            
+            helper.send(data, 2);
 
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            dict.Add("name", "abcb");
-            dict.Add("age", 20);
+            data = Encoding.UTF8.GetBytes("{\"openid\":\"czw12\",\"name\":\"张小五\",\"general\":1,\"army\":1}");
+            helper.send(data, 1);
 
-            string json = new JsonDictConverter().DictionaryToJson(dict);
-
-            Console.WriteLine(json);
-
-
-            dict = new JsonDictConverter().JsonToDictionary(json);
-            Console.WriteLine(dict);
 
          
             Console.ReadKey();
